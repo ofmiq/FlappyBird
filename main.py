@@ -1,5 +1,5 @@
 from classes import *
-from typing import List, Tuple
+from typing import List
 
 
 def draw_window(win: pygame.Surface, bird: Bird, pipes: List[Pipe], base: Base, score: int, highscore: int) -> None:
