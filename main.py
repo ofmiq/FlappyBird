@@ -1,9 +1,8 @@
-import pygame
-
 from classes import *
+from typing import List, Tuple
 
 
-def draw_window(win, bird, pipes, base, score, highscore):
+def draw_window(win: pygame.Surface, bird: Bird, pipes: List[Pipe], base: Base, score: int, highscore: int) -> None:
     win.blit(bg_img, (0, 0))
 
     for pipe in pipes:
@@ -22,7 +21,7 @@ def draw_window(win, bird, pipes, base, score, highscore):
     pygame.display.update()
 
 
-def main():
+def main() -> None:
     global WIN, HIGHSCORE
     win = WIN
 
@@ -83,4 +82,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

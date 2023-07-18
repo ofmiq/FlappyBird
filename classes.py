@@ -1,8 +1,9 @@
 from constants import *
 import random
+from typing import Tuple
 
 
-def blit_rotate_center(surf, image, topleft, angle):
+def blit_rotate_center(surf: pygame.Surface, image: pygame.Surface, topleft: Tuple[int, int], angle: int) -> None:
     rotated_image = pygame.transform.rotate(image, angle)
     new_rect = rotated_image.get_rect(center=image.get_rect(topleft=topleft).center)
 
@@ -15,8 +16,7 @@ class Bird:
     ROT_VEL = 20
     ANIMATION_TIME = 5
 
-    def __init__(self, x, y):
-
+    def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
         self.tilt = 0
@@ -26,14 +26,12 @@ class Bird:
         self.img_count = 0
         self.img = self.IMAGES[0]
 
-    def jump(self):
-
+    def jump(self) -> None:
         self.vel = -10.5
         self.tick_count = 0
         self.height = self.y
 
-    def move(self):
-
+    def move(self) -> None:
         self.tick_count += 1
 
         displacement = self.vel * self.tick_count + 0.5 * 3 * self.tick_count ** 2
@@ -44,7 +42,7 @@ class Bird:
         if displacement < 0:
             displacement -= 2
 
-        self.y = self.y + displacement
+        self.y += displacement
 
         if displacement < 0 or self.y < self.height + 50:
             if self.tilt < self.MAX_ROTATION:
@@ -53,8 +51,7 @@ class Bird:
             if self.tilt > -90:
                 self.tilt -= self.ROT_VEL
 
-    def draw(self, win):
-
+    def draw(self, win: pygame.Surface) -> None:
         self.img_count += 1
 
         if self.img_count <= self.ANIMATION_TIME:
@@ -75,8 +72,7 @@ class Bird:
 
         blit_rotate_center(win, self.img, (self.x, self.y), self.tilt)
 
-    def get_mask(self):
-
+    def get_mask(self) -> pygame.Mask:
         return pygame.mask.from_surface(self.img)
 
 
@@ -84,7 +80,7 @@ class Pipe:
     GAP = 200
     VEL = 5
 
-    def __init__(self, x):
+    def __init__(self, x: int) -> None:
         self.x = x
         self.height = 0
 
@@ -98,20 +94,20 @@ class Pipe:
 
         self.set_height()
 
-    def set_height(self):
+    def set_height(self) -> None:
         self.height = random.randrange(50, 450)
         self.top = self.height - self.PIPE_TOP.get_height()
         self.bottom = self.height + self.GAP
 
-    def move(self):
+    def move(self) -> None:
         self.x -= self.VEL
 
-    def draw(self, win):
+    def draw(self, win: pygame.Surface) -> None:
         win.blit(self.PIPE_TOP, (self.x, self.top))
 
         win.blit(self.PIPE_BOTTOM, (self.x, self.bottom))
 
-    def collide(self, bird):
+    def collide(self, bird: Bird) -> bool:
         bird_mask = bird.get_mask()
         top_mask = pygame.mask.from_surface(self.PIPE_TOP)
         bottom_mask = pygame.mask.from_surface(self.PIPE_BOTTOM)
@@ -132,14 +128,12 @@ class Base:
     WIDTH = base_img.get_width()
     IMG = base_img
 
-    def __init__(self, y):
-
+    def __init__(self, y: int) -> None:
         self.y = y
         self.x1 = 0
         self.x2 = self.WIDTH
 
-    def move(self):
-
+    def move(self) -> None:
         self.x1 -= self.VEL
         self.x2 -= self.VEL
         if self.x1 + self.WIDTH < 0:
@@ -148,7 +142,6 @@ class Base:
         if self.x2 + self.WIDTH < 0:
             self.x2 = self.x1 + self.WIDTH
 
-    def draw(self, win):
-
+    def draw(self, win: pygame.Surface) -> None:
         win.blit(self.IMG, (self.x1, self.y))
         win.blit(self.IMG, (self.x2, self.y))
