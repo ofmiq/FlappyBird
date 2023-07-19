@@ -69,13 +69,13 @@ def main() -> None:
         if add_pipe:
             score += 1
 
+            if score > HIGHSCORE:
+                HIGHSCORE = score
+
             pipes.append(Pipe(WIN_WIDTH))
 
         for pipe in remove_pipes:
             pipes.remove(pipe)
-
-        if score > HIGHSCORE:
-            HIGHSCORE = score
 
         draw_window(WIN, bird, pipes, base, score, HIGHSCORE)
 
